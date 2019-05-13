@@ -1,11 +1,12 @@
 const express = require('express');
 const News = require('../models/news');
-const router = express.Router();
 
+const router = express.Router();
 
 router.all('*', (req, res, next) => {
     if (!req.session.admin) {
-        res.redirect('login')
+        res.redirect('login');
+
         return;
     }
 
@@ -14,37 +15,36 @@ router.all('*', (req, res, next) => {
 
 /* GET home page. */
 router.get('/', (req, res) => {
-    // console.log(req.session.admin)
-
-    // const newsData = new News({
-    //     title: 'tytuł testowy',
-    //     description: 'opis'
-    // });
-
-    // newsData.save((err) => {
-    //     console.log(err);
-    // })
-
-    res.render('admin/index', { title: 'Admin' });
+    News.find({}, (err, data) => {
+        res.render('admin/index', { title: 'Admin', data });
+    });
 });
-
 
 router.get('/news/add', (req, res) => {
-    res.render('admin/news-form', { title: 'Dodaj news' });
+    res.render('admin/news-form', { title: 'Dodaj news', body: {}, errors: {} });
 });
-
 
 router.post('/news/add', (req, res) => {
     const body = req.body;
 
     const newsData = new News(body);
-
+    const errors = newsData.validateSync();
 
     newsData.save((err) => {
-        console.log(err);
-    })
+        if (err) {
+            res.render('admin/news-form', { title: 'Dodaj news', errors, body });
+            return;
+        }
 
-    res.render('admin/news-form', { title: 'Dodaj news' });
+        res.redirect('/admin')
+    });
 });
+
+router.get('/news/delete/:id', (req, res) => {
+    News.findByIdAndDelete(req.params.id, (err) => {
+        res.redirect('/admin')
+    })
+});
+
 
 module.exports = router;

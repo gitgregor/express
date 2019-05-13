@@ -8,8 +8,8 @@ var Schema = mongoose.Schema;
 // });
 
 var newsSchema = new Schema({
-    title: { type: String },
-    description: { type: String },
+    title: { type: String, required: [true, 'Pole Tytuł jest wymagane'] },
+    description: { type: String, required: [true, 'Pole Opis jest wymagane'] },
     created: { type: Date, default: Date.now },
 });
 
