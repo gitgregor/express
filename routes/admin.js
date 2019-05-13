@@ -39,6 +39,7 @@ router.post('/news/add', (req, res) => {
 
     const newsData = new News(body);
 
+
     newsData.save((err) => {
         console.log(err);
     })
