@@ -10,7 +10,7 @@ router.all('*', (req, res, next) => {
     }
 
     next();
-})
+});
 
 /* GET home page. */
 router.get('/', (req, res) => {
@@ -30,6 +30,19 @@ router.get('/', (req, res) => {
 
 
 router.get('/news/add', (req, res) => {
+    res.render('admin/news-form', { title: 'Dodaj news' });
+});
+
+
+router.post('/news/add', (req, res) => {
+    const body = req.body;
+
+    const newsData = new News(body);
+
+    newsData.save((err) => {
+        console.log(err);
+    })
+
     res.render('admin/news-form', { title: 'Dodaj news' });
 });
 
