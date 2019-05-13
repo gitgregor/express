@@ -5,11 +5,22 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var config = require('./config');
+var mongoose = require('mongoose');
+
+mongoose.connect(config.db, { useNewUrlParser: true });
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function () {
+//   console.log('db connected');
+// });
 
 var indexRouter = require('./routes/index');
 var newsRouter = require('./routes/news');
 var quizRouter = require('./routes/quiz');
 var adminRouter = require('./routes/admin');
+
+//uFdWC87WL5tYISsA
+//mongodb + srv://admin:uFdWC87WL5tYISsA@cluster0-newzf.mongodb.net/test?retryWrites=true
 
 var app = express();
 
